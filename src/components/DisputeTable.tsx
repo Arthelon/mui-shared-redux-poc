@@ -6,17 +6,14 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material";
-import { Dispute, DisputeStatusEnum } from "redux-dispute-poc";
 import { useGetDisputesQuery } from "../store/api";
-
-const DISPUTE_STATUS_LABEL: Record<DisputeStatusEnum, string> = {
-    [DisputeStatusEnum.Open]: "Open",
-    [DisputeStatusEnum.Condeded]: "Conceded",
-    [DisputeStatusEnum.Challenged]: "Challenged",
-};
+import DisputeTableRow from "./DisputeTableRow";
+import { useAppSelector } from "../hooks";
 
 export const DisputeTable = () => {
-    const { data, isLoading } = useGetDisputesQuery();
+    const { isLoading } = useGetDisputesQuery();
+    const disputes = useAppSelector((state) => state.dispute.disputes);
+
     const renderHeader = () => {
         return (
             <TableHead>
@@ -25,35 +22,29 @@ export const DisputeTable = () => {
                     <TableCell>Create Time</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell>Amount</TableCell>
+                    <TableCell></TableCell>
                 </TableRow>
             </TableHead>
         );
     };
 
-    const renderRow = (dispute: Dispute) => {
-        return (
-            <TableRow key={dispute.id}>
-                <TableCell>{dispute.id}</TableCell>
-                <TableCell>
-                    {new Date(dispute.createTime).toDateString()}
-                </TableCell>
-                <TableCell>{DISPUTE_STATUS_LABEL[dispute.status]}</TableCell>
-                <TableCell>{`$${dispute.amount}`}</TableCell>
-            </TableRow>
-        );
-    };
-
     const renderDisputes = () => {
         if (isLoading) {
-            return <CircularProgress />;
+            return (
+                <TableRow>
+                    <CircularProgress />
+                </TableRow>
+            );
         }
-        if (data?.length) {
-            return data.map(renderRow);
+        if (disputes.length) {
+            return disputes.map((dispute) => (
+                <DisputeTableRow key={dispute.id} {...dispute} />
+            ));
         }
 
         return (
             <TableRow>
-                <TableCell colSpan={4}>no records found</TableCell>
+                <TableCell colSpan={5}>no records found</TableCell>
             </TableRow>
         );
     };
