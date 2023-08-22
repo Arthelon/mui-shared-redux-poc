@@ -1,14 +1,18 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import disputeSlice from "redux-dispute-poc";
 import modalReducer from "./modalSlice";
+import apiReducer, { middleware as apiMiddleware } from "./api";
+import disputeReducer from "./disputeSlice";
 
 export const reducers = combineReducers({
-    dispute: disputeSlice.reducer,
+    dispute: disputeReducer,
+    api: apiReducer,
     modal: modalReducer,
 });
 
 const store = configureStore({
     reducer: reducers,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(apiMiddleware),
 });
 export default store;
 

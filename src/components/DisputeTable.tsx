@@ -1,16 +1,22 @@
 import {
+    CircularProgress,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
 } from "@mui/material";
-import { useAppSelector } from "../hooks";
-import { Dispute } from "redux-dispute-poc";
+import { Dispute, DisputeStatusEnum } from "redux-dispute-poc";
+import { useGetDisputesQuery } from "../store/api";
+
+const DISPUTE_STATUS_LABEL: Record<DisputeStatusEnum, string> = {
+    [DisputeStatusEnum.Open]: "Open",
+    [DisputeStatusEnum.Condeded]: "Conceded",
+    [DisputeStatusEnum.Challenged]: "Challenged",
+};
 
 export const DisputeTable = () => {
-    const disputes = useAppSelector((state) => state.dispute.disputes);
-
+    const { data, isLoading } = useGetDisputesQuery();
     const renderHeader = () => {
         return (
             <TableHead>
@@ -26,8 +32,28 @@ export const DisputeTable = () => {
 
     const renderRow = (dispute: Dispute) => {
         return (
+            <TableRow key={dispute.id}>
+                <TableCell>{dispute.id}</TableCell>
+                <TableCell>
+                    {new Date(dispute.createTime).toDateString()}
+                </TableCell>
+                <TableCell>{DISPUTE_STATUS_LABEL[dispute.status]}</TableCell>
+                <TableCell>{`$${dispute.amount}`}</TableCell>
+            </TableRow>
+        );
+    };
+
+    const renderDisputes = () => {
+        if (isLoading) {
+            return <CircularProgress />;
+        }
+        if (data?.length) {
+            return data.map(renderRow);
+        }
+
+        return (
             <TableRow>
-                <TableCell></TableCell>
+                <TableCell colSpan={4}>no records found</TableCell>
             </TableRow>
         );
     };
@@ -35,15 +61,7 @@ export const DisputeTable = () => {
     return (
         <Table>
             {renderHeader()}
-            <TableBody>
-                {disputes.length ? (
-                    disputes.map(renderRow)
-                ) : (
-                    <TableRow>
-                        <TableCell colSpan={4}>no records found</TableCell>
-                    </TableRow>
-                )}
-            </TableBody>
+            <TableBody>{renderDisputes()}</TableBody>
         </Table>
     );
 };
