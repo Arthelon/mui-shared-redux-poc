@@ -10,7 +10,7 @@ import { useGetDisputesQuery } from "../store/api";
 import DisputeTableRow from "./DisputeTableRow";
 import { useAppSelector } from "../hooks";
 
-export const DisputeTable = () => {
+const DisputeTable = () => {
     const { isLoading } = useGetDisputesQuery();
     const disputes = useAppSelector((state) => state.dispute.disputes);
 
@@ -56,3 +56,5 @@ export const DisputeTable = () => {
         </Table>
     );
 };
+
+export default DisputeTable;

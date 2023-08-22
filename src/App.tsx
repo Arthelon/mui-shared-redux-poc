@@ -1,6 +1,6 @@
 import { Provider } from "react-redux";
 import store from "./store/store";
-import { DisputeTable } from "./components/DisputeTable";
+import DisputeTable from "./components/DisputeTable";
 import styled from "@emotion/styled";
 import AddDisputeButton from "./components/AddDisputeButton";
 import AddDisputeModal from "./components/AddDisputeModal";
@@ -23,7 +23,7 @@ function App() {
                             fontWeight: "bold",
                         }}
                     >
-                        (using shared redux NPM module)
+                        (using shared redux NPM module. Custom Config)
                     </span>
                 </div>
                 <DisputeTable />
