@@ -6,6 +6,7 @@ export const addDispute = createAction<Dispute>("addDispute");
 
 const disputeSlice = configureDisputeSlice({
     extraActions: (builder) => {
+        // Add custom action to NPM reducer
         builder.addCase(addDispute, (state, action: PayloadAction<Dispute>) => {
             state.disputes.push(action.payload);
         });
