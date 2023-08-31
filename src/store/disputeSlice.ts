@@ -17,6 +17,7 @@ const disputeSlice = configureDisputeSlice({
     },
 });
 
+// Export reducer actions
 export const { setDisputes, concedeDispute, challengeDispute } =
     disputeSlice.actions;
 export default disputeSlice.reducer;

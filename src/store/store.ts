@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import modalReducer from "./modalSlice";
 import apiReducer, { middleware as apiMiddleware } from "./api";
+import modalReducer from "./modalSlice";
 import disputeReducer from "./disputeSlice";
 
 export const reducers = combineReducers({
